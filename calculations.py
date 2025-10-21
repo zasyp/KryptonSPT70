@@ -2,7 +2,7 @@ import numpy as np
 import math
 
 # Параметры СПД
-distances = np.array([10, 20, 30])
+distances =     np.array([10, 20, 30])
 plasm_potential = np.array([199.3, 186.1, 75.5])
 magnet_field = np.array([5.56, 38.6, 154.8])
 electron_current = np.array([2.59, 2.23, 0.5])
