@@ -81,30 +81,11 @@ python calculations.py
 
 - **`plasma_calculations_results.txt`**: Detailed results with all calculated parameters, units, and explanations
 
-## Physical Interpretation
-
-### Hall Parameters
-- **β >> 1**: Particles complete many cyclotron orbits between collisions (strongly magnetized)
-- **β << 1**: Collisions dominate over magnetic effects (weakly magnetized)
-
-### Typical Results
-- **Electrons**: β_e >> 1 (strongly magnetized, trapped by magnetic field)
-- **Ions**: β_i << 1 (weakly magnetized, dominated by electric field)
-
 ## Dependencies
 
 - NumPy
 - Math (standard library)
 
-## Units
-
-All calculations use SI units:
-- Length: meters (m)
-- Time: seconds (s)
-- Mass: kilograms (kg)
-- Current: amperes (A)
-- Temperature: Kelvin (K) or electron volts (eV)
-- Magnetic field: Tesla (T) or Gauss (Gs)
 
 ## Notes
 
