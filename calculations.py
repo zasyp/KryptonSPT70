@@ -188,7 +188,7 @@ def save_results_to_file(filename="plasma_calculations_results.txt"):
         f.write(f"Циклотронная частота электронов (рад/с): {electron_cycle_frequency}\n")
         f.write(f"Циклотронная частота ионов (рад/с): {ion_cycle_frequency}\n")
         f.write(f"Поляризуемость атома (м^3): {alpha}\n")
-        f.write(f"Относительная энергия движения иона и атома (эВ): {relative_energy}\n\n")
+        f.write(f"Относительная энергия движения иона и атома (эВ): {relative_energy}\n")
         f.write(f"Радиус циклоиды электронов (м): {electron_cycloid_radius}\n")
         f.write(f"Радиус циклоиды ионов (м): {ion_cycloid_radius}\n")
         f.write(f"Высота циклоиды электронов (м): {electron_cycloid_height}\n")
@@ -238,9 +238,7 @@ def save_results_to_file(filename="plasma_calculations_results.txt"):
         f.write("-" * 30 + "\n")
         f.write(f"Параметр Холла для электронов: {electron_hall_parameter}\n")
         f.write(f"Параметр Холла для ионов: {ion_hall_parameter}\n\n")
-        
-        f.write("Расчеты завершены успешно!\n")
-        f.write(f"Дата и время: {np.datetime64('now')}\n")
+
 
         # Электропроводность
         f.write("ЭЛЕКТРОПРОВОДНОСТЬ:\n")
