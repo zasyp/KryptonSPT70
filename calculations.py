@@ -68,6 +68,10 @@ qoulon_logarithm = np.log(qoulon_logarithm_arg)  # безразмерная
 # Параметры движения частиц
 electron_cycle_frequency = (elementary_charge*magnet_field_tesla)/electron_mass  # рад/с
 ion_cycle_frequency = (elementary_charge*magnet_field_tesla)/krypton_mass  # рад/с
+electron_cycloid_radius = (electron_mass * electron_velocity) / (elementary_charge * magnet_field_tesla)  # м
+ion_cycloid_radius = (krypton_mass * ion_velocity) / (elementary_charge * magnet_field_tesla)  # м
+electron_cycloid_height = 2 * electron_mass * plasm_potential / (elementary_charge * magnet_field_tesla ** 2)  # м
+ion_cycloid_height = 2 * krypton_mass * plasm_potential / (elementary_charge * magnet_field_tesla ** 2)  # м
 
 # Поляризумость атома (из формулы r_at=0.62(alpha)*1/3)
 alpha = (krypton_atom_radius/0.62) ** 3  # м³
@@ -93,14 +97,19 @@ ion_ion_collision_frequency = (2)  ** 0.5 * (qoulon_collision_cross_section * io
 ion_electron_collision_frequency = (qoulon_collision_cross_section * electron_concentration * ion_velocity)
 ion_neutral_collision_frequency = 3/2 * (ion_velocity * neutral_concentration * recharge_cross_section)
 
+overall_ion_collision_frequency = ion_ion_collision_frequency + ion_electron_collision_frequency + ion_neutral_collision_frequency
+
 # Частоты столкновений для нейтральных частиц (с⁻¹)
 neutral_electron_collision_frequency = 1  / (elastic_en_time + nonelastic_en_time)
 neutral_ion_collision_frequency = (qoulon_collision_cross_section * ion_concentration * neutral_velocity)
-overall_ion_collision_frequency = ion_ion_collision_frequency + ion_electron_collision_frequency + ion_neutral_collision_frequency
+neutral_neutral_collision_frequency = neutral_concentration * neutral_velocity * neutral_neutral_collision_cross_section
+
+overall_neutral_collision_frequency = neutral_electron_collision_frequency + neutral_ion_collision_frequency + neutral_neutral_collision_frequency
 
 # Длины свободного пробега (м)
 electron_free_path = electron_velocity / overall_electron_collision_frequency
 ion_free_path = ion_velocity / overall_ion_collision_frequency
+neutral_free_path = neutral_velocity / overall_neutral_collision_frequency
 
 # Параметры Холла (безразмерные)
 # β = ωc / ν, где ωc - циклотронная частота, ν - частота столкновений
@@ -108,20 +117,9 @@ ion_free_path = ion_velocity / overall_ion_collision_frequency
 electron_hall_parameter = electron_cycle_frequency / overall_electron_collision_frequency
 ion_hall_parameter = ion_cycle_frequency / overall_ion_collision_frequency
 
-# Проверка значений параметров Холла
-print(f"\n=== ПАРАМЕТРЫ ХОЛЛА ===")
-print(f"Параметр Холла для электронов: {electron_hall_parameter}")
-print(f"Параметр Холла для ионов: {ion_hall_parameter}")
-print(f"\nЦиклотронная частота электронов (рад/с): {electron_cycle_frequency}")
-print(f"Циклотронная частота ионов (рад/с): {ion_cycle_frequency}")
-print(f"Общая частота столкновений электронов (с⁻¹): {overall_electron_collision_frequency}")
-print(f"Общая частота столкновений ионов (с⁻¹): {overall_ion_collision_frequency}")
-
-# Физическая интерпретация
-print(f"\n=== ФИЗИЧЕСКАЯ ИНТЕРПРЕТАЦИЯ ===")
-print(f"β_e >> 1 означает, что электроны совершают много оборотов между столкновениями")
-print(f"β_i >> 1 означает, что ионы совершают много оборотов между столкновениями")
-print(f"β << 1 означает, что частицы сталкиваются чаще, чем совершают обороты")
+# Электропроводность (См/м)
+electric_conductivity_longitudal = (electron_concentration * elementary_charge ** 2) / (electron_mass * (electron_neutral_collision_frequency + electron_ion_collision_frequency))
+electric_conductivity_transversal = electric_conductivity_longitudal * (electron_hall_parameter / (electron_hall_parameter ** 2 + 1))
 
 # Функция для записи всех результатов в файл
 def save_results_to_file(filename="plasma_calculations_results.txt"):
@@ -191,6 +189,10 @@ def save_results_to_file(filename="plasma_calculations_results.txt"):
         f.write(f"Циклотронная частота ионов (рад/с): {ion_cycle_frequency}\n")
         f.write(f"Поляризуемость атома (м^3): {alpha}\n")
         f.write(f"Относительная энергия движения иона и атома (эВ): {relative_energy}\n\n")
+        f.write(f"Радиус циклоиды электронов (м): {electron_cycloid_radius}\n")
+        f.write(f"Радиус циклоиды ионов (м): {ion_cycloid_radius}\n")
+        f.write(f"Высота циклоиды электронов (м): {electron_cycloid_height}\n")
+        f.write(f"Высота циклоиды ионов (м): {ion_cycloid_height}\n\n")
         
         # Сечения столкновений
         f.write("СЕЧЕНИЯ СТОЛКНОВЕНИЙ:\n")
@@ -220,14 +222,17 @@ def save_results_to_file(filename="plasma_calculations_results.txt"):
         f.write("ЧАСТОТЫ СТОЛКНОВЕНИЙ ДЛЯ НЕЙТРАЛЬНЫХ ЧАСТИЦ:\n")
         f.write("-" * 30 + "\n")
         f.write(f"Частота столкновений нейтрал-электрон (с^-1): {neutral_electron_collision_frequency}\n")
-        f.write(f"Частота столкновений нейтрал-ион (с^-1): {neutral_ion_collision_frequency}\n\n")
+        f.write(f"Частота столкновений нейтрал-ион (с^-1): {neutral_ion_collision_frequency}\n")
+        f.write(f"Частота столкновений нейтрал-нейтрал (с^-1): {neutral_neutral_collision_frequency}\n")
+        f.write(f"Общая частота столкновений нейтралов (с^-1): {overall_neutral_collision_frequency}\n\n")
         
         # Длины свободного пробега
         f.write("ДЛИНЫ СВОБОДНОГО ПРОБЕГА:\n")
         f.write("-" * 30 + "\n")
         f.write(f"Длина свободного пробега электронов (м): {electron_free_path}\n")
-        f.write(f"Длина свободного пробега ионов (м): {ion_free_path}\n\n")
-        
+        f.write(f"Длина свободного пробега ионов (м): {ion_free_path}\n")
+        f.write(f"Длина свободного пробега нейтралов (м): {neutral_free_path}\n\n")
+
         # Параметры Холла
         f.write("ПАРАМЕТРЫ ХОЛЛА:\n")
         f.write("-" * 30 + "\n")
@@ -236,6 +241,12 @@ def save_results_to_file(filename="plasma_calculations_results.txt"):
         
         f.write("Расчеты завершены успешно!\n")
         f.write(f"Дата и время: {np.datetime64('now')}\n")
+
+        # Электропроводность
+        f.write("ЭЛЕКТРОПРОВОДНОСТЬ:\n")
+        f.write("-" * 30 + "\n")
+        f.write(f"Электропроводность вдоль магнитного поля (См/м): {electric_conductivity_longitudal}\n")
+        f.write(f"Электропроводность поперек магнитного поля (См/м): {electric_conductivity_transversal}\n\n")
 
 # Вызов функции для сохранения результатов
 save_results_to_file()
