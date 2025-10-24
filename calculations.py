@@ -3,7 +3,7 @@ import math
 
 # Параметры СПД
 distances =     np.array([10, 20, 30])
-plasm_potential = np.array([199.3, 186.1, 75.5])
+plasm_potential = np.array([200 - 199.3, 200 - 186.1, 200 - 75.5])
 magnet_field = np.array([5.56, 38.6, 154.8])
 electron_current = np.array([2.59, 2.23, 0.5])
 ion_current = np.array([0.108, 0.475, 2.19])
@@ -52,8 +52,8 @@ neutral_velocity = (3*k*neutral_temperature/krypton_mass) ** 0.5
 ion_temperature = (krypton_mass * ion_velocity ** 2 / (2 * k)) / 11600
 
 # Концентрации частиц
-electron_concentration = electron_current/(electron_velocity*elementary_charge)  # м⁻³
 ion_concentration = ion_current/(ion_velocity*elementary_charge)  # м⁻³
+electron_concentration = ion_concentration  # м⁻³
 
 # Концентрация нейтралов: массовый расход нейтралов / (масса частицы * скорость * площадь)
 neutral_mass_flow = mass_flow - ion_current * krypton_mass / elementary_charge  # кг/с
@@ -72,8 +72,8 @@ electron_qoulon_logarithm = np.log(electron_qoulon_logarithm_arg)  # безра�
 ion_qoulon_logarithm = np.log(ion_qoulon_logarithm_arg)  # безразмерная
 
 # Параметры движения частиц
-electron_cycle_frequency = (elementary_charge*magnet_field_tesla)/electron_mass  # рад/с
-ion_cycle_frequency = (elementary_charge*magnet_field_tesla)/krypton_mass  # рад/с
+electron_cycle_frequency = (elementary_charge*magnet_field_tesla*10000)/electron_mass  # рад/с
+ion_cycle_frequency = (elementary_charge*magnet_field_tesla*10000)/krypton_mass  # рад/с
 electron_cycloid_radius = (electron_mass * electron_velocity) / (elementary_charge * magnet_field_tesla)  # м
 ion_cycloid_radius = (krypton_mass * ion_velocity) / (elementary_charge * magnet_field_tesla)  # м
 electron_cycloid_height = 2 * electron_mass * plasm_potential / (elementary_charge * magnet_field_tesla ** 2)  # м
