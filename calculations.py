@@ -59,7 +59,7 @@ electron_concentration = electron_current / (electron_velocity * elementary_char
 # Концентрация нейтралов: массовый расход нейтралов / (масса частицы * скорость * площадь)
 neutral_mass_flow = mass_flow - ion_current * krypton_mass / elementary_charge  # кг/с
 neutral_concentration = neutral_mass_flow / (krypton_mass * neutral_velocity * square_of_channel)  # м⁻³
-
+print(neutral_mass_flow)
 # Параметры плазмы
 debye_radius = ((dielectric_constant * k * electron_temperature) / 
                 (electron_concentration * elementary_charge ** 2)) ** 0.5  # м
