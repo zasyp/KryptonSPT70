@@ -31,8 +31,8 @@ magnet_field_tesla = magnet_field / 10000
 mean_diameter = 56e-3
 large_diameter = 70
 channel_width = 28e-3
-square_of_channel = (np.pi * (mean_diameter + channel_width) ** 2) / 4
-
+square_of_channel = (np.pi * (mean_diameter + channel_width) ** 2) / 4 - (np.pi * (mean_diameter - channel_width) ** 2) / 4
+print(square_of_channel)
 # Физические константы
 k = 1.38e-23
 electron_mass = 9.11e-31
@@ -53,7 +53,8 @@ ion_temperature = (krypton_mass * ion_velocity ** 2 / (2 * k)) / 11600
 
 # Концентрации частиц
 ion_concentration = ion_current/(ion_velocity*elementary_charge)  # м⁻³
-electron_concentration = ion_concentration  # м⁻³
+electron_concentration = electron_current / (electron_velocity * elementary_charge)
+# electron_concentration = ion_concentration  # м⁻³
 
 # Концентрация нейтралов: массовый расход нейтралов / (масса частицы * скорость * площадь)
 neutral_mass_flow = mass_flow - ion_current * krypton_mass / elementary_charge  # кг/с
