@@ -11,13 +11,10 @@ a0 = 0.529e-8
 
 # Параметры СПД
 distances =     np.array([10, 20, 30])
-<<<<<<< HEAD
+
 plasm_potential = np.array([199.3, 186.1, 75.5])
 magnet_field = np.array([4.59, 29.2, 117.2])
-=======
-plasm_potential = np.array([200 - 199.3, 200 - 186.1, 200 - 75.5])
-magnet_field = np.array([5.56, 38.6, 154.8])
->>>>>>> 572f44f7fa44ce58c91a135721616ebdfd5bef48
+
 electron_current = np.array([2.59, 2.23, 0.5])
 ion_current = np.array([0.108, 0.475, 2.19])
 electron_temperature = np.array([4, 7.01, 2.47])
@@ -45,7 +42,6 @@ magnet_field_tesla = magnet_field / 10000
 mean_diameter = 56e-3
 large_diameter = 70
 channel_width = 28e-3
-<<<<<<< HEAD
 square_of_channel = (np.pi * (mean_diameter + channel_width) ** 2) / 4
 neutral_mass_flow = mass_flow - ion_current * krypton_mass / elementary_charge  # кг/с
 
@@ -54,19 +50,6 @@ print(electron_current)
 ion_current = np.array([0.108, 0.475, 2.19]) / square_of_channel
 print(ion_current)
 print(elastic_en_time+nonelastic_en_time)
-=======
-square_of_channel = (np.pi * (mean_diameter + channel_width) ** 2) / 4 - (np.pi * (mean_diameter - channel_width) ** 2) / 4
-print(square_of_channel)
-# Физические константы
-k = 1.38e-23
-electron_mass = 9.11e-31
-elementary_charge = 1.6e-19
-dielectric_constant  = 8.85e-12
-krypton_mass = 83.798 * 1.66e-27
-krypton_atom_radius = 198e-10
-krypton_ionisation_potential = 13.99
-a0 = 0.529e-8
->>>>>>> 572f44f7fa44ce58c91a135721616ebdfd5bef48
 
 # Скорости частиц (м/с)
 electron_velocity = ((8*k*electron_temperature*11600)/(np.pi*electron_mass)) ** 0.5
@@ -77,10 +60,7 @@ neutral_velocity = (3*k*neutral_temperature/krypton_mass) ** 0.5
 ion_temperature = (krypton_mass * ion_velocity ** 2 / (2 * k)) / 11600
 
 # Концентрации частиц
-<<<<<<< HEAD
 electron_concentration = ((electron_current ** 2) * ((elastic_en_time + nonelastic_en_time)) ** 2) / (((electron_velocity ** 2) * dielectric_constant * electron_mass))  # м⁻³
-=======
->>>>>>> 572f44f7fa44ce58c91a135721616ebdfd5bef48
 ion_concentration = ion_current/(ion_velocity*elementary_charge)  # м⁻³
 electron_concentration = electron_current / (electron_velocity * elementary_charge)
 # electron_concentration = ion_concentration  # м⁻³
