@@ -82,8 +82,8 @@ b_min_ii = elementary_charge**2 / (4 * np.pi * dielectric_constant * krypton_mas
 ion_qoulon_logarithm = np.log(debye_radius / b_min_ii)
 
 # Параметры движения частиц
-electron_cycle_frequency = (elementary_charge*magnet_field_tesla*10000)/electron_mass  # рад/с
-ion_cycle_frequency = (elementary_charge*magnet_field_tesla*10000)/krypton_mass  # рад/с
+electron_cycle_frequency = (elementary_charge*magnet_field_tesla)/electron_mass  # рад/с
+ion_cycle_frequency = (elementary_charge*magnet_field_tesla)/krypton_mass  # рад/с
 electron_cycloid_radius = (electron_mass * electron_velocity) / (elementary_charge * magnet_field_tesla)  # м
 ion_cycloid_radius = (krypton_mass * ion_velocity) / (elementary_charge * magnet_field_tesla)  # м
 electron_cycloid_height = 2 * electron_mass * plasm_potential / (elementary_charge * magnet_field_tesla ** 2)  # м
@@ -116,11 +116,9 @@ overall_ion_collision_frequency = ion_ion_collision_frequency + ion_neutral_coll
 
 # Частоты столкновений для нейтральных частиц (с⁻¹)
 neutral_electron_collision_frequency = 1  / (elastic_en_time + nonelastic_en_time)
-neutral_ion_collision_frequency = (neutral_neutral_collision_cross_section * ion_concentration * neutral_velocity)
 neutral_neutral_collision_frequency = neutral_concentration * neutral_velocity * neutral_neutral_collision_cross_section
 
-overall_neutral_collision_frequency = neutral_electron_collision_frequency + neutral_ion_collision_frequency + neutral_neutral_collision_frequency
-
+overall_neutral_collision_frequency = neutral_electron_collision_frequency +  + ion_neutral_collision_frequency + neutral_neutral_collision_frequency
 # Длины свободного пробега (м)
 electron_free_path = electron_velocity / overall_electron_collision_frequency
 ion_free_path = ion_velocity / overall_ion_collision_frequency
@@ -129,7 +127,7 @@ neutral_free_path = neutral_velocity / overall_neutral_collision_frequency
 # Параметры Холла (безразмерные)
 # β = ωc / ν, где ωc - циклотронная частота, ν - частота столкновений
 # Параметр Холла показывает отношение времени между столкновениями к периоду циклотронного вращения
-electron_hall_parameter = electron_cycle_frequency / (electron_neutral_collision_frequency)
+electron_hall_parameter = electron_cycle_frequency / (overall_electron_collision_frequency)
 ion_hall_parameter = ion_cycle_frequency / overall_ion_collision_frequency
 
 # Электропроводность (См/м)
@@ -242,7 +240,6 @@ def save_results_to_file(filename="plasma_calculations_results.txt"):
         f.write("ЧАСТОТЫ СТОЛКНОВЕНИЙ ДЛЯ НЕЙТРАЛЬНЫХ ЧАСТИЦ:\n")
         f.write("-" * 30 + "\n")
         f.write(f"Частота столкновений нейтрал-электрон (с^-1): {neutral_electron_collision_frequency}\n")
-        f.write(f"Частота столкновений нейтрал-ион (с^-1): {neutral_ion_collision_frequency}\n")
         f.write(f"Частота столкновений нейтрал-нейтрал (с^-1): {neutral_neutral_collision_frequency}\n")
         f.write(f"Общая частота столкновений нейтралов (с^-1): {overall_neutral_collision_frequency}\n\n")
         
