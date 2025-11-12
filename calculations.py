@@ -1,5 +1,6 @@
 import numpy as np
 import math
+
 # Физические константы
 k = 1.38e-23
 electron_mass = 9.11e-31
@@ -68,8 +69,9 @@ electron_concentration = electron_current / (electron_velocity * elementary_char
 # Концентрация нейтралов: массовый расход нейтралов / (масса частицы * скорость * площадь)
 neutral_concentration = neutral_mass_flow / (krypton_mass * neutral_velocity * square_of_channel)  # м⁻³
 print(neutral_mass_flow)
+
 # Параметры плазмы
-debye_radius = ((dielectric_constant * k * electron_temperature * 11600) / (electron_concentration * elementary_charge ** 2)) ** 0.5  # м
+debye_radius = ((dielectric_constant * k * electron_temperature * 11600) / (electron_concentration * (elementary_charge ** 2))) ** 0.5  # м
 number_of_particles_in_debye_sphere = (electron_concentration) * (debye_radius ** 3) * np.pi * (4 / 3)  # безразмерная
 plasm_frequency = ((electron_concentration * elementary_charge ** 2) / (dielectric_constant * electron_mass)) ** 0.5  # рад/с
                    
