@@ -6,9 +6,9 @@ k = 1.38e-23
 electron_mass = 9.11e-31
 elementary_charge = 1.6e-19
 dielectric_constant  = 8.85e-12
-krypton_atom_radius = 198e-10
+krypton_atom_radius = 198e-12
 krypton_ionisation_potential = 13.99
-a0 = 0.529e-8
+a0 = 0.529e-10
 
 # Параметры СПД
 distances =     np.array([10, 20, 30])
@@ -39,11 +39,12 @@ print(f"Массовый расход: {mass_flow:.6e} кг/с")
 krypton_mass = 83.798 * 1.66e-27
 
 magnet_field_tesla = magnet_field / 10000
+
 # Параметры канала
 mean_diameter = 56e-3
 large_diameter = 70
 channel_width = 28e-3
-square_of_channel = (np.pi * (mean_diameter + channel_width) ** 2) / 4
+square_of_channel = ((np.pi * (mean_diameter + channel_width) ** 2) / 4) - ((np.pi * (mean_diameter - channel_width) ** 2) / 4)
 neutral_mass_flow = mass_flow - ion_current * krypton_mass / elementary_charge  # кг/с
 
 electron_current = np.array([2.59, 2.23, 0.5]) / square_of_channel
@@ -61,9 +62,8 @@ neutral_velocity = (3*k*neutral_temperature/krypton_mass) ** 0.5
 ion_temperature = (krypton_mass * ion_velocity ** 2 / (2 * k)) / 11600
 
 # Концентрации частиц
-electron_concentration = ((electron_current ** 2) * ((elastic_en_time + nonelastic_en_time)) ** 2) / (((electron_velocity ** 2) * dielectric_constant * electron_mass))  # м⁻³
 ion_concentration = ion_current/(ion_velocity*elementary_charge)  # м⁻³
-electron_concentration = electron_current / (electron_velocity * elementary_charge)
+electron_concentration = ion_concentration
 # electron_concentration = ion_concentration  # м⁻³
 
 # Концентрация нейтралов: массовый расход нейтралов / (масса частицы * скорость * площадь)
@@ -75,21 +75,44 @@ debye_radius = ((dielectric_constant * k * electron_temperature * 11600) / (elec
 number_of_particles_in_debye_sphere = (electron_concentration) * (debye_radius ** 3) * np.pi * (4 / 3)  # безразмерная
 plasm_frequency = ((electron_concentration * elementary_charge ** 2) / (dielectric_constant * electron_mass)) ** 0.5  # рад/с
                    
-# Минимальный радиус столкновения для электрон-ионных взаимодействий
-b_min_ei = elementary_charge**2 / (4 * np.pi * dielectric_constant * electron_mass * electron_velocity**2)  # м
 # Кулоновский логарифм для электронов (и электрон-ионных): ln(λ_D/b_min)
-electron_qoulon_logarithm = np.log(debye_radius / b_min_ei)
+electron_qoulon_logarithm =14 + 1.5*np.log(electron_temperature * 11600) - 0.5 * np.log(electron_concentration)
 # Аналогично для ионов (как минимум)
-b_min_ii = elementary_charge**2 / (4 * np.pi * dielectric_constant * krypton_mass * ion_velocity**2)  # м
-ion_qoulon_logarithm = np.log(debye_radius / b_min_ii)
+ion_qoulon_logarithm =14 + 1.5*np.log(ion_temperature * 11600) - 0.5 * np.log(ion_concentration)
 
-# Параметры движения частиц
-electron_cycle_frequency = (elementary_charge*magnet_field_tesla)/electron_mass  # рад/с
-ion_cycle_frequency = (elementary_charge*magnet_field_tesla)/krypton_mass  # рад/с
-electron_cycloid_radius = (electron_mass * electron_velocity) / (elementary_charge * magnet_field_tesla)  # м
-ion_cycloid_radius = (krypton_mass * ion_velocity) / (elementary_charge * magnet_field_tesla)  # м
-electron_cycloid_height = 2 * electron_mass * plasm_potential / (elementary_charge * magnet_field_tesla ** 2)  # м
-ion_cycloid_height = 2 * krypton_mass * plasm_potential / (elementary_charge * magnet_field_tesla ** 2)  # м
+# циклотронные частоты (рад/с)
+electron_cycle_frequency = (elementary_charge * magnet_field_tesla) / electron_mass     # ω_ce
+ion_cycle_frequency = (elementary_charge * magnet_field_tesla) / krypton_mass           # ω_ci
+
+# используем тепловые скорости, которые вы уже вычислили:
+# electron_velocity и ion_velocity у вас — это средняя/thermal speeds
+# принять поперечную компоненту v_perp = v_th / sqrt(2) для изотропного распределения
+v_perp_e = electron_velocity / np.sqrt(2)
+v_perp_i = ion_velocity / np.sqrt(2)
+
+# если частицы ускоряются потенциалом вдоль поля, вычислим ориентировочно v_parallel
+# (здесь предполагаем, что потенциал полностью переходит в кинетическую энергию вдоль B)
+v_parallel_e = np.sqrt(2 * elementary_charge * plasm_potential / electron_mass)
+v_parallel_i = np.sqrt(2 * elementary_charge * plasm_potential / krypton_mass)
+
+# Larmor radii (м)
+electron_larmor_radius = (electron_mass * v_perp_e) / (elementary_charge * magnet_field_tesla)
+ion_larmor_radius = (krypton_mass * v_perp_i) / (elementary_charge * magnet_field_tesla)
+
+# период гиротрения (с)
+# если ω == 0 (нулевое B), защитимся от деления на ноль
+with np.errstate(divide='ignore', invalid='ignore'):
+    electron_gyration_period = 2 * np.pi / electron_cycle_frequency
+    ion_gyration_period = 2 * np.pi / ion_cycle_frequency
+
+# pitch / осевое смещение за один виток (м)
+electron_pitch = v_parallel_e * electron_gyration_period
+ion_pitch = v_parallel_i * ion_gyration_period
+
+# При желании: длина пути за N витков или average pitch angle:
+# pitch_angle = arctan(v_parallel / v_perp)  # угол витка относительно плоскости
+electron_pitch_angle = np.arctan2(v_parallel_e, v_perp_e)  # рад
+ion_pitch_angle = np.arctan2(v_parallel_i, v_perp_i)      # рад
 
 # Поляризуемость атома (из формулы r_at=0.62(alpha)*1/3)
 alpha = (krypton_atom_radius/0.62) ** 3  # м³
@@ -99,8 +122,8 @@ relative_energy = ((krypton_mass * (ion_velocity - neutral_velocity) ** 2) / 2) 
 
 # Сечения столкновений (м²)
 neutral_neutral_collision_cross_section = np.pi*kinetic_diameter_krypton**2
-qoulon_collision_cross_section_electron = 2.87e-14 * electron_qoulon_logarithm / (electron_temperature ** 2)
-qoulon_collision_cross_section_ion = 2.87e-14 * ion_qoulon_logarithm / (ion_temperature ** 2)
+qoulon_collision_cross_section_electron = 2.87e-18 * electron_qoulon_logarithm / ((electron_temperature) ** 2)
+qoulon_collision_cross_section_ion = 2.87e-18 * ion_qoulon_logarithm / ((ion_temperature) ** 2)
 transport_cross_section_ions = 2 * np.pi * (2 ** 0.5) * (a0 ** 2) * ((alpha / (a0 ** 3)) * (krypton_ionisation_potential/relative_energy)) ** 0.5
 recharge_cross_section = transport_cross_section_ions / 2
 
@@ -163,7 +186,7 @@ def save_results_to_file(filename="plasma_calculations_results.txt"):
         f.write(f"Объемный расход криптона (м³/с): {volume_flow}\n")
         f.write(f"Плотность криптона (кг/м³): {krypton_density}\n")
         f.write(f"Массовый расход (кг/с): {mass_flow}\n")
-        f.write(f"Массовый расход нейтралов (кг/с): {neutral_mass_flow}\n")
+        f.write(f"Массовый расход нейтралов (кг/с): {neutral_mass_flow}\n\n")
         
         # Константы
         f.write("ФИЗИЧЕСКИЕ КОНСТАНТЫ:\n")
@@ -198,21 +221,21 @@ def save_results_to_file(filename="plasma_calculations_results.txt"):
         f.write(f"Число частиц в сфере Дебая: {number_of_particles_in_debye_sphere}\n")
         f.write(f"Плазменная частота (рад/с): {plasm_frequency}\n")
         f.write(f"Кулоновский Логарифм ион: {ion_qoulon_logarithm}\n")
-        f.write(f"Кулоновский Логарифм электрон: {electron_qoulon_logarithm}\n")
+        f.write(f"Кулоновский Логарифм электрон: {electron_qoulon_logarithm}\n\n")
 
-
-        
         # Параметры движения частиц
         f.write("ПАРАМЕТРЫ ДВИЖЕНИЯ ЧАСТИЦ:\n")
         f.write("-" * 30 + "\n")
         f.write(f"Циклотронная частота электронов (рад/с): {electron_cycle_frequency}\n")
         f.write(f"Циклотронная частота ионов (рад/с): {ion_cycle_frequency}\n")
-        f.write(f"Поляризуемость атома (м^3): {alpha}\n")
-        f.write(f"Относительная энергия движения иона и атома (эВ): {relative_energy}\n")
-        f.write(f"Радиус циклоиды электронов (м): {electron_cycloid_radius}\n")
-        f.write(f"Радиус циклоиды ионов (м): {ion_cycloid_radius}\n")
-        f.write(f"Высота циклоиды электронов (м): {electron_cycloid_height}\n")
-        f.write(f"Высота циклоиды ионов (м): {ion_cycloid_height}\n\n")
+        f.write(f"Радиус Лармора электронов (м): {electron_larmor_radius}\n")
+        f.write(f"Радиус Лармора ионов (м): {ion_larmor_radius}\n")
+        f.write(f"Период гиротрения электронов (с): {electron_gyration_period}\n")
+        f.write(f"Период гиротрения ионов (с): {ion_gyration_period}\n")
+        f.write(f"Осевая высота витка электронов (pitch, м): {electron_pitch}\n")
+        f.write(f"Осевая высота витка ионов (pitch, м): {ion_pitch}\n")
+        f.write(f"Угол винтовой траектории электронов (рад): {electron_pitch_angle}\n")
+        f.write(f"Угол винтовой траектории ионов (рад): {ion_pitch_angle}\n\n")
         
         # Сечения столкновений
         f.write("СЕЧЕНИЯ СТОЛКНОВЕНИЙ:\n")
@@ -258,13 +281,12 @@ def save_results_to_file(filename="plasma_calculations_results.txt"):
         f.write(f"Параметр Холла для электронов: {electron_hall_parameter}\n")
         f.write(f"Параметр Холла для ионов: {ion_hall_parameter}\n\n")
 
-
         # Электропроводность
         f.write("ЭЛЕКТРОПРОВОДНОСТЬ:\n")
         f.write("-" * 30 + "\n")
         f.write(f"Электропроводность вдоль магнитного поля (См/м): {electric_conductivity_longitudal}\n")
         f.write(f"Электропроводность поперек магнитного поля (См/м): {electric_conductivity_transversal}\n\n")
 
-# Вызов функции для сохранения результатов
+# Вызов функции
 save_results_to_file()
 print("Все результаты сохранены в файл 'plasma_calculations_results.txt'")
