@@ -64,7 +64,6 @@ ion_temperature = (krypton_mass * ion_velocity ** 2 / (2 * k)) / 11600
 # Концентрации частиц
 ion_concentration = ion_current/(ion_velocity*elementary_charge)  # м⁻³
 electron_concentration = ion_concentration
-# electron_concentration = ion_concentration  # м⁻³
 
 # Концентрация нейтралов: массовый расход нейтралов / (масса частицы * скорость * площадь)
 neutral_concentration = neutral_mass_flow / (krypton_mass * neutral_velocity * square_of_channel)  # м⁻³
