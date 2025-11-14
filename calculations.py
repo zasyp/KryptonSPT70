@@ -11,7 +11,7 @@ krypton_ionisation_potential = 13.99
 a0 = 0.529e-10
 
 # Параметры СПД
-distances =     np.array([10, 20, 30])
+distances = np.array([10, 20, 30])
 
 plasm_potential = np.array([199.3, 186.1, 75.5])
 magnet_field = np.array([4.59, 29.2, 117.2])
