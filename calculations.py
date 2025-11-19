@@ -379,29 +379,7 @@ def plot_results():
     plt.savefig('plasma_parameters_plots.png', dpi=300, bbox_inches='tight')
     plt.show()
     
-    # Дополнительный график: отношения характерных длин
-    fig2, ax10 = plt.subplots(figsize=(10, 6))
-    
-    # Отношение длины свободного пробега электронов к радиусу Лармора
-    ratio_electron = electron_free_path / electron_larmor_radius
-    # Отношение длины свободного пробега ионов к радиусу Лармора
-    ratio_ion = ion_free_path / ion_larmor_radius
-    
-    ax10.semilogy(distances, ratio_electron, 'ro-', label='Электроны: λ/L', linewidth=2, markersize=8)
-    ax10.semilogy(distances, ratio_ion, 'bo-', label='Ионы: λ/L', linewidth=2, markersize=8)
-    ax10.semilogy(distances, electron_hall_parameter, 'r--', label='Электроны: ω/ν', linewidth=2)
-    ax10.semilogy(distances, ion_hall_parameter, 'b--', label='Ионы: ω/ν', linewidth=2)
-    
-    ax10.set_xlabel('Расстояние (мм)')
-    ax10.set_ylabel('Безразмерные параметры')
-    ax10.set_title('Характерные безразмерные параметры плазмы')
-    ax10.legend()
-    ax10.grid(True, alpha=0.3)
-    
-    plt.tight_layout()
-    plt.savefig('plasma_dimensionless_parameters.png', dpi=300, bbox_inches='tight')
-    plt.show()
 
 # Вызов функции построения графиков после сохранения результатов
 plot_results()
-print("Графики сохранены в файлы 'plasma_parameters_plots.png' и 'plasma_dimensionless_parameters.png'")
+print("Графики сохранены в файлы 'plasma_parameters_plots.png'")
