@@ -98,7 +98,6 @@ def save_results_to_file(filename="plasma_calculations_results.txt"):
         # Частоты столкновений для нейтральных частиц
         f.write("ЧАСТОТЫ СТОЛКНОВЕНИЙ ДЛЯ НЕЙТРАЛЬНЫХ ЧАСТИЦ:\n")
         f.write("-" * 30 + "\n")
-        f.write(f"Частота столкновений нейтрал-электрон (с^-1): {neutral_electron_collision_frequency}\n")
         f.write(f"Частота столкновений нейтрал-нейтрал (с^-1): {neutral_neutral_collision_frequency}\n")
         f.write(f"Общая частота столкновений нейтралов (с^-1): {overall_neutral_collision_frequency}\n\n")
         

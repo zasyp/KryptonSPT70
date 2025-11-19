@@ -94,9 +94,9 @@ ion_larmor_radius = (krypton_mass * v_perp_i) / (elementary_charge * magnet_fiel
 
 # Поляризуемость атома (из формулы r_at=0.62(alpha)*1/3)
 alpha = (krypton_atom_radius/0.62) ** 3  # м³
-
 # Вычисление относительной энергии движения иона и атома
 relative_energy = ((krypton_mass * (ion_velocity - neutral_velocity) ** 2) / 2) * 6.24e18  # эВ
+print(f"rel:{relative_energy}")
 
 # Сечения столкновений (м²)
 neutral_neutral_collision_cross_section = np.pi*kinetic_diameter_krypton**2
@@ -117,10 +117,9 @@ ion_neutral_collision_frequency = 3/2 * (ion_velocity * neutral_concentration * 
 overall_ion_collision_frequency = ion_ion_collision_frequency + ion_neutral_collision_frequency + electron_ion_collision_frequency
 
 # Частоты столкновений для нейтральных частиц (с⁻¹)
-neutral_electron_collision_frequency = 1  / (elastic_en_time + nonelastic_en_time)
 neutral_neutral_collision_frequency = neutral_concentration * neutral_velocity * neutral_neutral_collision_cross_section
 
-overall_neutral_collision_frequency = neutral_electron_collision_frequency +  + ion_neutral_collision_frequency + neutral_neutral_collision_frequency
+overall_neutral_collision_frequency = electron_neutral_collision_frequency +  + ion_neutral_collision_frequency + neutral_neutral_collision_frequency
 # Длины свободного пробега (м)
 electron_free_path = electron_velocity / overall_electron_collision_frequency
 ion_free_path = ion_velocity / overall_ion_collision_frequency
