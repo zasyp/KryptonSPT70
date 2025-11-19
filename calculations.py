@@ -89,29 +89,9 @@ ion_cycle_frequency = (elementary_charge * magnet_field_tesla) / krypton_mass   
 v_perp_e = electron_velocity / np.sqrt(2)
 v_perp_i = ion_velocity / np.sqrt(2)
 
-# если частицы ускоряются потенциалом вдоль поля, вычислим ориентировочно v_parallel
-# (здесь предполагаем, что потенциал полностью переходит в кинетическую энергию вдоль B)
-v_parallel_e = np.sqrt(2 * elementary_charge * plasm_potential / electron_mass)
-v_parallel_i = np.sqrt(2 * elementary_charge * plasm_potential / krypton_mass)
-
 # Larmor radii (м)
 electron_larmor_radius = (electron_mass * v_perp_e) / (elementary_charge * magnet_field_tesla)
 ion_larmor_radius = (krypton_mass * v_perp_i) / (elementary_charge * magnet_field_tesla)
-
-# период гиротрения (с)
-# если ω == 0 (нулевое B), защитимся от деления на ноль
-with np.errstate(divide='ignore', invalid='ignore'):
-    electron_gyration_period = 2 * np.pi / electron_cycle_frequency
-    ion_gyration_period = 2 * np.pi / ion_cycle_frequency
-
-# pitch / осевое смещение за один виток (м)
-electron_pitch = v_parallel_e * electron_gyration_period
-ion_pitch = v_parallel_i * ion_gyration_period
-
-# При желании: длина пути за N витков или average pitch angle:
-# pitch_angle = arctan(v_parallel / v_perp)  # угол витка относительно плоскости
-electron_pitch_angle = np.arctan2(v_parallel_e, v_perp_e)  # рад
-ion_pitch_angle = np.arctan2(v_parallel_i, v_perp_i)      # рад
 
 # Поляризуемость атома (из формулы r_at=0.62(alpha)*1/3)
 alpha = (krypton_atom_radius/0.62) ** 3  # м³
@@ -228,12 +208,6 @@ def save_results_to_file(filename="plasma_calculations_results.txt"):
         f.write(f"Циклотронная частота ионов (рад/с): {ion_cycle_frequency}\n")
         f.write(f"Радиус Лармора электронов (м): {electron_larmor_radius}\n")
         f.write(f"Радиус Лармора ионов (м): {ion_larmor_radius}\n")
-        f.write(f"Период гиротрения электронов (с): {electron_gyration_period}\n")
-        f.write(f"Период гиротрения ионов (с): {ion_gyration_period}\n")
-        f.write(f"Осевая высота витка электронов (pitch, м): {electron_pitch}\n")
-        f.write(f"Осевая высота витка ионов (pitch, м): {ion_pitch}\n")
-        f.write(f"Угол винтовой траектории электронов (рад): {electron_pitch_angle}\n")
-        f.write(f"Угол винтовой траектории ионов (рад): {ion_pitch_angle}\n\n")
         
         # Сечения столкновений
         f.write("СЕЧЕНИЯ СТОЛКНОВЕНИЙ:\n")
