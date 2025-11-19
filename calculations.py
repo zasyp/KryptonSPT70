@@ -55,7 +55,7 @@ print(elastic_en_time+nonelastic_en_time)
 
 # Скорости частиц (м/с)
 electron_velocity = ((8*k*electron_temperature*11600)/(np.pi*electron_mass)) ** 0.5
-ion_velocity = (elementary_charge*plasm_potential/(2*krypton_mass)) ** 0.5
+ion_velocity = ((elementary_charge*(200 - plasm_potential))/(2*krypton_mass)) ** 0.5
 neutral_velocity = (3*k*neutral_temperature/krypton_mass) ** 0.5
 
 # Температура ионов
