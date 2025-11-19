@@ -122,19 +122,18 @@ relative_energy = ((krypton_mass * (ion_velocity - neutral_velocity) ** 2) / 2) 
 # Сечения столкновений (м²)
 neutral_neutral_collision_cross_section = np.pi*kinetic_diameter_krypton**2
 qoulon_collision_cross_section_electron = 2.87e-18 * electron_qoulon_logarithm / ((electron_temperature) ** 2)
-qoulon_collision_cross_section_ion = 2.87e-18 * ion_qoulon_logarithm / ((ion_temperature) ** 2)
 transport_cross_section_ions = 2 * np.pi * (2 ** 0.5) * (a0 ** 2) * ((alpha / (a0 ** 3)) * (krypton_ionisation_potential/relative_energy)) ** 0.5
 recharge_cross_section = transport_cross_section_ions / 2
 
 # Частоты столкновений для электронов (с⁻¹)
 electron_electron_collision_frequency = (2) ** 0.5 * (qoulon_collision_cross_section_electron * electron_concentration * electron_velocity)
-electron_ion_collision_frequency = (qoulon_collision_cross_section_ion * ion_concentration * electron_velocity)
+electron_ion_collision_frequency = (qoulon_collision_cross_section_electron * ion_concentration * electron_velocity)
 electron_neutral_collision_frequency = 1 / (elastic_en_time + nonelastic_en_time)
 
 overall_electron_collision_frequency = electron_electron_collision_frequency + electron_ion_collision_frequency + electron_neutral_collision_frequency
 
 # Частоты столкновений для ионов (с⁻¹)
-ion_ion_collision_frequency = (2) ** 0.5 * (qoulon_collision_cross_section_ion * ion_concentration * ion_velocity)
+ion_ion_collision_frequency = (2) ** 0.5 * (qoulon_collision_cross_section_electron * ion_concentration * ion_velocity)
 ion_neutral_collision_frequency = 3/2 * (ion_velocity * neutral_concentration * recharge_cross_section)
 overall_ion_collision_frequency = ion_ion_collision_frequency + ion_neutral_collision_frequency + electron_ion_collision_frequency
 
@@ -241,7 +240,6 @@ def save_results_to_file(filename="plasma_calculations_results.txt"):
         f.write("-" * 30 + "\n")
         f.write(f"Сечение столкновения нейтрал-нейтрал (м^2): {neutral_neutral_collision_cross_section}\n")
         f.write(f"Сечение кулоновского столкновения для электронов (м^2): {qoulon_collision_cross_section_electron}\n")
-        f.write(f"Сечение кулоновского столкновения для ионов (м^2): {qoulon_collision_cross_section_ion}\n")
         f.write(f"Транспортное сечение ионов (м^2): {transport_cross_section_ions}\n")
         f.write(f"Сечение перезарядки (м^2): {recharge_cross_section}\n\n")
         
