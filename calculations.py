@@ -113,7 +113,7 @@ overall_electron_collision_frequency = electron_electron_collision_frequency + e
 
 # Частоты столкновений для ионов (с⁻¹)
 ion_ion_collision_frequency = (2) ** 0.5 * (qoulon_collision_cross_section_electron * ion_concentration * ion_velocity)
-ion_neutral_collision_frequency = 3/2 * (ion_velocity * neutral_concentration * recharge_cross_section)
+ion_neutral_collision_frequency = 3/2 * ((ion_velocity - neutral_velocity) * neutral_concentration * recharge_cross_section)
 overall_ion_collision_frequency = ion_ion_collision_frequency + ion_neutral_collision_frequency + electron_ion_collision_frequency
 
 # Частоты столкновений для нейтральных частиц (с⁻¹)
@@ -135,4 +135,9 @@ ion_hall_parameter = ion_cycle_frequency / overall_ion_collision_frequency
 electric_conductivity_longitudal = (electron_concentration * elementary_charge ** 2) / (electron_mass * (electron_neutral_collision_frequency + electron_ion_collision_frequency))
 electric_conductivity_transversal = electric_conductivity_longitudal * (electron_hall_parameter / (electron_hall_parameter ** 2 + 1))
 
-print(ion_current)
+# Тяга и тяговый КПД
+thrust = (ion_current[2] * square_of_channel) * (2 * krypton_mass * 200 / elementary_charge) ** (1/2)
+nu_thrust = thrust * ion_velocity[2] / (540)
+
+print(thrust)
+print(nu_thrust)
