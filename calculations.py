@@ -107,7 +107,7 @@ recharge_cross_section = transport_cross_section_ions / 2
 # Частоты столкновений для электронов (с⁻¹)
 electron_electron_collision_frequency = (2) ** 0.5 * (qoulon_collision_cross_section_electron * electron_concentration * electron_velocity)
 electron_ion_collision_frequency = (qoulon_collision_cross_section_electron * ion_concentration * electron_velocity)
-electron_neutral_collision_frequency = 1 / (elastic_en_time + nonelastic_en_time)
+electron_neutral_collision_frequency = (1 / elastic_en_time) + (1 /nonelastic_en_time)
 
 overall_electron_collision_frequency = electron_electron_collision_frequency + electron_ion_collision_frequency + electron_neutral_collision_frequency
 

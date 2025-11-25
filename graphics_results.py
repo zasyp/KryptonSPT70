@@ -136,9 +136,9 @@ def plot_results():
     
     # График 1: Концентрации частиц
     ax1 = axes[0, 0]
-    ax1.semilogy(distances, electron_concentration, 'ro-', label='Электроны', linewidth=2, markersize=8)
-    ax1.semilogy(distances, ion_concentration, 'bo-', label='Ионы', linewidth=2, markersize=8)
-    ax1.semilogy(distances, neutral_concentration, 'go-', label='Нейтралы', linewidth=2, markersize=8)
+    ax1.semilogy(distances, electron_concentration, 'ro-', label='Электроны', linewidth=0, markersize=8)
+    ax1.semilogy(distances, ion_concentration, 'bo-', label='Ионы', linewidth=0, markersize=8)
+    ax1.semilogy(distances, neutral_concentration, 'go-', label='Нейтралы', linewidth=0, markersize=8)
     ax1.set_xlabel('Расстояние (мм)')
     ax1.set_ylabel('Концентрация (м⁻³)')
     ax1.set_title('Концентрации частиц')
@@ -147,8 +147,8 @@ def plot_results():
     
     # График 2: Температуры
     ax2 = axes[0, 1]
-    ax2.plot(distances, electron_temperature, 'ro-', label='Электроны', linewidth=2, markersize=8)
-    ax2.plot(distances, ion_temperature, 'bo-', label='Ионы', linewidth=2, markersize=8)
+    ax2.plot(distances, electron_temperature, 'ro-', label='Электроны', linewidth=0, markersize=8)
+    ax2.plot(distances, ion_temperature, 'bo-', label='Ионы', linewidth=0, markersize=8)
     ax2.set_xlabel('Расстояние (мм)')
     ax2.set_ylabel('Температура (эВ)')
     ax2.set_title('Температуры частиц')
@@ -157,8 +157,8 @@ def plot_results():
     
     # График 3: Скорости частиц
     ax3 = axes[0, 2]
-    ax3.semilogy(distances, electron_velocity, 'ro-', label='Электроны', linewidth=2, markersize=8)
-    ax3.semilogy(distances, ion_velocity, 'bo-', label='Ионы', linewidth=2, markersize=8)
+    ax3.semilogy(distances, electron_velocity, 'ro-', label='Электроны', linewidth=0, markersize=8)
+    ax3.semilogy(distances, ion_velocity, 'bo-', label='Ионы', linewidth=0, markersize=8)
     ax3.set_xlabel('Расстояние (мм)')
     ax3.set_ylabel('Скорость (м/с)')
     ax3.set_title('Скорости частиц')
@@ -167,8 +167,8 @@ def plot_results():
     
     # График 4: Параметры Холла
     ax4 = axes[1, 0]
-    ax4.semilogy(distances, electron_hall_parameter, 'ro-', label='Электроны', linewidth=2, markersize=8)
-    ax4.semilogy(distances, ion_hall_parameter, 'bo-', label='Ионы', linewidth=2, markersize=8)
+    ax4.semilogy(distances, electron_hall_parameter, 'ro-', label='Электроны', linewidth=0, markersize=8)
+    ax4.semilogy(distances, ion_hall_parameter, 'bo-', label='Ионы', linewidth=0, markersize=8)
     ax4.set_xlabel('Расстояние (мм)')
     ax4.set_ylabel('Параметр Холла')
     ax4.set_title('Параметры Холла')
@@ -177,9 +177,9 @@ def plot_results():
     
     # График 5: Частоты столкновений
     ax5 = axes[1, 1]
-    ax5.semilogy(distances, overall_electron_collision_frequency, 'ro-', label='Электроны', linewidth=2, markersize=8)
-    ax5.semilogy(distances, overall_ion_collision_frequency, 'bo-', label='Ионы', linewidth=2, markersize=8)
-    ax5.semilogy(distances, overall_neutral_collision_frequency, 'go-', label='Нейтралы', linewidth=2, markersize=8)
+    ax5.semilogy(distances, overall_electron_collision_frequency, 'ro-', label='Электроны', linewidth=0, markersize=8)
+    ax5.semilogy(distances, overall_ion_collision_frequency, 'bo-', label='Ионы', linewidth=0, markersize=8)
+    ax5.semilogy(distances, overall_neutral_collision_frequency, 'go-', label='Нейтралы', linewidth=0, markersize=8)
     ax5.set_xlabel('Расстояние (мм)')
     ax5.set_ylabel('Частота столкновений (с⁻¹)')
     ax5.set_title('Общие частоты столкновений')
@@ -188,9 +188,9 @@ def plot_results():
     
     # График 6: Длины свободного пробега
     ax6 = axes[1, 2]
-    ax6.semilogy(distances, electron_free_path, 'ro-', label='Электроны', linewidth=2, markersize=8)
-    ax6.semilogy(distances, ion_free_path, 'bo-', label='Ионы', linewidth=2, markersize=8)
-    ax6.semilogy(distances, neutral_free_path, 'go-', label='Нейтралы', linewidth=2, markersize=8)
+    ax6.semilogy(distances, electron_free_path, 'ro-', label='Электроны', linewidth=0, markersize=8)
+    ax6.semilogy(distances, ion_free_path, 'bo-', label='Ионы', linewidth=0, markersize=8)
+    ax6.semilogy(distances, neutral_free_path, 'go-', label='Нейтралы', linewidth=0, markersize=8)
     ax6.set_xlabel('Расстояние (мм)')
     ax6.set_ylabel('Длина свободного пробега (м)')
     ax6.set_title('Длины свободного пробега')
@@ -199,8 +199,8 @@ def plot_results():
     
     # График 7: Электропроводность
     ax7 = axes[2, 0]
-    ax7.semilogy(distances, electric_conductivity_longitudal, 'ro-', label='Продольная', linewidth=2, markersize=8)
-    ax7.semilogy(distances, electric_conductivity_transversal, 'bo-', label='Поперечная', linewidth=2, markersize=8)
+    ax7.semilogy(distances, electric_conductivity_longitudal, 'ro-', label='Продольная', linewidth=0, markersize=8)
+    ax7.semilogy(distances, electric_conductivity_transversal, 'bo-', label='Поперечная', linewidth=0, markersize=8)
     ax7.set_xlabel('Расстояние (мм)')
     ax7.set_ylabel('Электропроводность (См/м)')
     ax7.set_title('Электропроводность')
@@ -209,8 +209,8 @@ def plot_results():
     
     # График 8: Радиусы Лармора
     ax8 = axes[2, 1]
-    ax8.semilogy(distances, electron_larmor_radius, 'ro-', label='Электроны', linewidth=2, markersize=8)
-    ax8.semilogy(distances, ion_larmor_radius, 'bo-', label='Ионы', linewidth=2, markersize=8)
+    ax8.semilogy(distances, electron_larmor_radius, 'ro-', label='Электроны', linewidth=0, markersize=8)
+    ax8.semilogy(distances, ion_larmor_radius, 'bo-', label='Ионы', linewidth=0, markersize=8)
     ax8.set_xlabel('Расстояние (мм)')
     ax8.set_ylabel('Радиус Лармора (м)')
     ax8.set_title('Радиусы Лармора')
@@ -220,13 +220,13 @@ def plot_results():
     # График 9: Потенциал плазмы и магнитное поле
     ax9 = axes[2, 2]
     ax9_primary = ax9
-    ax9_primary.plot(distances, plasm_potential, 'ro-', label='Потенциал плазмы', linewidth=2, markersize=8)
+    ax9_primary.plot(distances, plasm_potential, 'ro-', label='Потенциал плазмы', linewidth=0, markersize=8)
     ax9_primary.set_xlabel('Расстояние (мм)')
     ax9_primary.set_ylabel('Потенциал плазмы (В)', color='red')
     ax9_primary.tick_params(axis='y', labelcolor='red')
     
     ax9_secondary = ax9_primary.twinx()
-    ax9_secondary.plot(distances, magnet_field, 'bo-', label='Магнитное поле', linewidth=2, markersize=8)
+    ax9_secondary.plot(distances, magnet_field, 'bo-', label='Магнитное поле', linewidth=0, markersize=8)
     ax9_secondary.set_ylabel('Магнитное поле (Гс)', color='blue')
     ax9_secondary.tick_params(axis='y', labelcolor='blue')
     
