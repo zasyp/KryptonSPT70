@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from calculations import *
+from matplotlib import rcParams
 
 # Функция для записи всех результатов в файл
 def save_results_to_file(filename="plasma_calculations_results.txt"):
@@ -124,123 +125,161 @@ def save_results_to_file(filename="plasma_calculations_results.txt"):
 save_results_to_file()
 print("Все результаты сохранены в файл 'plasma_calculations_results.txt'")
 
-# Функция для построения графиков
+rcParams['font.family'] = 'serif'
+rcParams['font.serif'] = ['Times New Roman']       # для всех обычных надписей
+rcParams['mathtext.fontset'] = 'stix'              # math-формулы в стиле Times
+rcParams['mathtext.default'] = 'it'                # курсив по умолчанию
+rcParams['axes.unicode_minus'] = False
+rcParams['font.size'] = 18
+rcParams['axes.titlesize'] = 20
+rcParams['axes.labelsize'] = 18
+rcParams['xtick.labelsize'] = 16
+rcParams['ytick.labelsize'] = 16
+rcParams['legend.fontsize'] = 16
+rcParams['figure.titlesize'] = 24
+rcParams['figure.autolayout'] = True
 def plot_results():
-    """
-    Строит графики основных параметров плазмы в зависимости от расстояния
-    """
-    # Настройка стиля графиков
-    plt.style.use('default')
-    fig, axes = plt.subplots(3, 3, figsize=(15, 12))
-    fig.suptitle('Параметры плазмы СПД в зависимости от расстояния', fontsize=16, fontweight='bold')
-    
-    # График 1: Концентрации частиц
-    ax1 = axes[0, 0]
-    ax1.semilogy(distances, electron_concentration, 'ro-', label='Электроны', linewidth=0, markersize=8)
-    ax1.semilogy(distances, ion_concentration, 'bo-', label='Ионы', linewidth=0, markersize=8)
-    ax1.semilogy(distances, neutral_concentration, 'go-', label='Нейтралы', linewidth=0, markersize=8)
-    ax1.set_xlabel('Расстояние (мм)')
-    ax1.set_ylabel('Концентрация (м⁻³)')
-    ax1.set_title('Концентрации частиц')
-    ax1.legend()
-    ax1.grid(True, alpha=0.3)
-    
-    # График 2: Температуры
-    ax2 = axes[0, 1]
-    ax2.plot(distances, electron_temperature, 'ro-', label='Электроны', linewidth=0, markersize=8)
-    ax2.plot(distances, ion_temperature, 'bo-', label='Ионы', linewidth=0, markersize=8)
-    ax2.set_xlabel('Расстояние (мм)')
-    ax2.set_ylabel('Температура (эВ)')
-    ax2.set_title('Температуры частиц')
-    ax2.legend()
-    ax2.grid(True, alpha=0.3)
-    
-    # График 3: Скорости частиц
-    ax3 = axes[0, 2]
-    ax3.semilogy(distances, electron_velocity, 'ro-', label='Электроны', linewidth=0, markersize=8)
-    ax3.semilogy(distances, ion_velocity, 'bo-', label='Ионы', linewidth=0, markersize=8)
-    ax3.set_xlabel('Расстояние (мм)')
-    ax3.set_ylabel('Скорость (м/с)')
-    ax3.set_title('Скорости частиц')
-    ax3.legend()
-    ax3.grid(True, alpha=0.3)
-    
-    # График 4: Параметры Холла
-    ax4 = axes[1, 0]
-    ax4.semilogy(distances, electron_hall_parameter, 'ro-', label='Электроны', linewidth=0, markersize=8)
-    ax4.semilogy(distances, ion_hall_parameter, 'bo-', label='Ионы', linewidth=0, markersize=8)
-    ax4.set_xlabel('Расстояние (мм)')
-    ax4.set_ylabel('Параметр Холла')
-    ax4.set_title('Параметры Холла')
-    ax4.legend()
-    ax4.grid(True, alpha=0.3)
-    
-    # График 5: Частоты столкновений
-    ax5 = axes[1, 1]
-    ax5.semilogy(distances, overall_electron_collision_frequency, 'ro-', label='Электроны', linewidth=0, markersize=8)
-    ax5.semilogy(distances, overall_ion_collision_frequency, 'bo-', label='Ионы', linewidth=0, markersize=8)
-    ax5.semilogy(distances, overall_neutral_collision_frequency, 'go-', label='Нейтралы', linewidth=0, markersize=8)
-    ax5.set_xlabel('Расстояние (мм)')
-    ax5.set_ylabel('Частота столкновений (с⁻¹)')
-    ax5.set_title('Общие частоты столкновений')
-    ax5.legend()
-    ax5.grid(True, alpha=0.3)
-    
-    # График 6: Длины свободного пробега
-    ax6 = axes[1, 2]
-    ax6.semilogy(distances, electron_free_path, 'ro-', label='Электроны', linewidth=0, markersize=8)
-    ax6.semilogy(distances, ion_free_path, 'bo-', label='Ионы', linewidth=0, markersize=8)
-    ax6.semilogy(distances, neutral_free_path, 'go-', label='Нейтралы', linewidth=0, markersize=8)
-    ax6.set_xlabel('Расстояние (мм)')
-    ax6.set_ylabel('Длина свободного пробега (м)')
-    ax6.set_title('Длины свободного пробега')
-    ax6.legend()
-    ax6.grid(True, alpha=0.3)
-    
-    # График 7: Электропроводность
-    ax7 = axes[2, 0]
-    ax7.semilogy(distances, electric_conductivity_longitudal, 'ro-', label='Продольная', linewidth=0, markersize=8)
-    ax7.semilogy(distances, electric_conductivity_transversal, 'bo-', label='Поперечная', linewidth=0, markersize=8)
-    ax7.set_xlabel('Расстояние (мм)')
-    ax7.set_ylabel('Электропроводность (См/м)')
-    ax7.set_title('Электропроводность')
-    ax7.legend()
-    ax7.grid(True, alpha=0.3)
-    
-    # График 8: Радиусы Лармора
-    ax8 = axes[2, 1]
-    ax8.semilogy(distances, electron_larmor_radius, 'ro-', label='Электроны', linewidth=0, markersize=8)
-    ax8.semilogy(distances, ion_larmor_radius, 'bo-', label='Ионы', linewidth=0, markersize=8)
-    ax8.set_xlabel('Расстояние (мм)')
-    ax8.set_ylabel('Радиус Лармора (м)')
-    ax8.set_title('Радиусы Лармора')
-    ax8.legend()
-    ax8.grid(True, alpha=0.3)
-    
-    # График 9: Потенциал плазмы и магнитное поле
-    ax9 = axes[2, 2]
-    ax9_primary = ax9
-    ax9_primary.plot(distances, plasm_potential, 'ro-', label='Потенциал плазмы', linewidth=0, markersize=8)
-    ax9_primary.set_xlabel('Расстояние (мм)')
-    ax9_primary.set_ylabel('Потенциал плазмы (В)', color='red')
-    ax9_primary.tick_params(axis='y', labelcolor='red')
-    
-    ax9_secondary = ax9_primary.twinx()
-    ax9_secondary.plot(distances, magnet_field, 'bo-', label='Магнитное поле', linewidth=0, markersize=8)
-    ax9_secondary.set_ylabel('Магнитное поле (Гс)', color='blue')
-    ax9_secondary.tick_params(axis='y', labelcolor='blue')
-    
-    ax9_primary.set_title('Потенциал плазмы и магнитное поле')
-    lines1, labels1 = ax9_primary.get_legend_handles_labels()
-    lines2, labels2 = ax9_secondary.get_legend_handles_labels()
-    ax9_primary.legend(lines1 + lines2, labels1 + labels2, loc='upper right')
-    ax9_primary.grid(True, alpha=0.3)
-    
-    plt.tight_layout()
-    plt.savefig('plasma_parameters_plots.png', dpi=300, bbox_inches='tight')
-    plt.show()
-    
 
-# Вызов функции построения графиков после сохранения результатов
+    # -------- Список графиков для автоматической обработки --------
+    plots = [
+        # 1
+        {
+            "title": "Концентрации частиц",
+            "ylabels": r'Концентрация, м$^{-3}$',
+            "yscale": "log",
+            "series": [
+                (electron_concentration, r'$n_e$', 'ro'),
+                (ion_concentration, r'$n_i$', 'bo'),
+                (neutral_concentration, r'$n_n$', 'go')
+            ]
+        },
+        # 2
+        {
+            "title": "Температуры частиц",
+            "ylabels": "Температура, эВ",
+            "series": [
+                (electron_temperature, r'$T_e$', 'ro'),
+                (ion_temperature, r'$T_i$', 'bo')
+            ]
+        },
+        # 3
+        {
+            "title": "Скорости частиц",
+            "ylabels": "Скорость, м/с",
+            "yscale": "log",
+            "series": [
+                (electron_velocity, r'$v_e$', 'ro'),
+                (ion_velocity, r'$v_i$', 'bo')
+            ]
+        },
+        # 4
+        {
+            "title": "Параметры Холла",
+            "ylabels": "Параметр Холла",
+            "yscale": "log",
+            "series": [
+                (electron_hall_parameter, r'$\beta_e$', 'ro'),
+                (ion_hall_parameter, r'$\beta_i$', 'bo')
+            ]
+        },
+        # 5
+        {
+            "title": "Частоты столкновений",
+            "ylabels": "Частота столкновений, с⁻¹",
+            "yscale": "log",
+            "series": [
+                (overall_electron_collision_frequency, r'$\nu_e$', 'ro'),
+                (overall_ion_collision_frequency, r'$\nu_i$', 'bo'),
+                (overall_neutral_collision_frequency, r'$\nu_n$', 'go')
+            ]
+        },
+        # 6
+        {
+            "title": "Длины свободного пробега",
+            "ylabels": "Длина свободного пробега, м",
+            "yscale": "log",
+            "series": [
+                (electron_free_path, r'$\lambda_e$', 'ro'),
+                (ion_free_path, r'$\lambda_i$', 'bo'),
+                (neutral_free_path, r'$\lambda_n$', 'go')
+            ]
+        },
+        # 7
+        {
+            "title": "Электропроводность",
+            "ylabels": "Электропроводность, См/м",
+            "yscale": "log",
+            "series": [
+                (electric_conductivity_longitudal, r'$\sigma_\parallel$', 'ro'),
+                (electric_conductivity_transversal, r'$\sigma_\perp$', 'bo')
+            ]
+        },
+        # 8
+        {
+            "title": "Радиусы Лармора частиц",
+            "ylabels": "Радиус Лармора, м",
+            "yscale": "log",
+            "series": [
+                (electron_larmor_radius, r'$r_{Le}$', 'ro'),
+                (ion_larmor_radius, r'$r_{Li}$', 'bo')
+            ]
+        },
+        # 9
+        {
+            "title": "Потенциал плазмы и магнитное поле",
+            "ylabels": "Потенциал плазмы, В",
+            "series": [
+                (plasm_potential, r'$\varphi$', 'ro')
+            ],
+            "magnet": True  # особая обработка
+        }
+    ]
+
+    # =================== генерация по 4 графика на картинку ===================
+    page = 1
+    for i in range(0, len(plots), 4):
+        part = plots[i:i+4]
+        fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+        fig.suptitle(f"Параметры плазмы (лист {page})", fontsize=18, fontweight='bold')
+
+        for ax, plot in zip(axes.flat, part):
+
+            # стандартные графики
+            if "magnet" not in plot:
+
+                for data, label, style in plot["series"]:
+                    ax.plot(distances, data, style, marker='o', linestyle='none', label=label)
+
+                if "yscale" in plot:
+                    ax.set_yscale(plot["yscale"])
+                ax.set_title(plot["title"])
+                ax.set_ylabel(plot["ylabels"])
+                ax.set_xlabel("Расстояние, мм")
+                ax.grid(True, alpha=0.3)
+                ax.legend()
+
+            # последний график с двумя осями
+            else:
+                ax.plot(distances, plasm_potential, 'ro', marker='o', linestyle='none', label=r'$\varphi$')
+                ax.set_ylabel("Потенциал плазмы, В", color='r')
+                ax.tick_params(axis='y', labelcolor='r')
+                ax.set_xlabel("Расстояние, мм")
+                ax.set_title(plot["title"])
+                ax.grid(True, alpha=0.3)
+
+                ax2 = ax.twinx()
+                ax2.plot(distances, magnet_field, 'bo', marker='o', linestyle='none', label=r'$B$')
+                ax2.set_ylabel("Магнитное поле, Гс", color='b')
+                ax2.tick_params(axis='y', labelcolor='b')
+
+        plt.tight_layout()
+        fname = f"plasma_plots_page_{page}.png"
+        plt.savefig(fname, dpi=300, bbox_inches='tight')
+        plt.show()
+        print(f"Сохранено: {fname}")
+        page += 1
+
+
+# запуск
 plot_results()
 print("Графики сохранены в файлы 'plasma_parameters_plots.png'")

@@ -50,7 +50,8 @@ neutral_mass_flow = mass_flow - ion_current * krypton_mass / elementary_charge  
 electron_current = np.array([2.59, 2.23, 0.5]) / square_of_channel
 print(electron_current)
 ion_current = np.array([0.108, 0.475, 2.19]) / square_of_channel
-print(ion_current)
+print(square_of_channel)
+print(f'Ионный ток: {ion_current}')
 print(elastic_en_time+nonelastic_en_time)
 
 # Скорости частиц (м/с)
@@ -66,9 +67,7 @@ ion_concentration = ion_current/(ion_velocity*elementary_charge)  # м⁻³
 electron_concentration = ion_concentration
 
 # Концентрация нейтралов: массовый расход нейтралов / (масса частицы * скорость * площадь)
-neutral_concentration = neutral_mass_flow / (krypton_mass * neutral_velocity * square_of_channel)  # м⁻³
-print(neutral_mass_flow)
-
+neutral_concentration = np.array([3.62e19, 3.03e19, 2.84e18])
 # Параметры плазмы
 debye_radius = ((dielectric_constant * k * electron_temperature * 11600) / (electron_concentration * (elementary_charge ** 2))) ** 0.5  # м
 number_of_particles_in_debye_sphere = (electron_concentration) * (debye_radius ** 3) * np.pi * (4 / 3)  # безразмерная
